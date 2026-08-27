@@ -1,5 +1,6 @@
 # STEW Dataset
 STEW Dataset/
+processed_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
