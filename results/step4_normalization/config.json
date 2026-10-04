@@ -1,0 +1,80 @@
+{
+  "created": "2026-10-04T00:34:02",
+  "paths": {
+    "X": "C:\\Users\\imman\\OneDrive\\Desktop\\FYP\\processed_data\\contract_v1\\X_filtered.npy",
+    "metadata": "C:\\Users\\imman\\OneDrive\\Desktop\\FYP\\processed_data\\contract_v1\\metadata.csv",
+    "splits": "C:\\Users\\imman\\OneDrive\\Desktop\\FYP\\processed_data\\contract_v1\\splits.json",
+    "out_dir": "C:\\Users\\imman\\OneDrive\\Desktop\\FYP\\results\\step4_normalization"
+  },
+  "X_shape": [
+    7104,
+    512,
+    14
+  ],
+  "subject_col": "subject",
+  "label_col": "label",
+  "classes": [
+    "0",
+    "1"
+  ],
+  "n_folds": 5,
+  "n_dev_subjects": 38,
+  "n_test_subjects_excluded": 10,
+  "variants": {
+    "A_none": "no scaling",
+    "B_zscore": "channel-wise (X-mean)/std over train windows x time",
+    "C_robust": "channel-wise (X-median)/(1.4826*MAD) over train windows x time"
+  },
+  "feature_sets": {
+    "logabs": "log10(abs band power + eps), PRIMARY",
+    "logabs_rms": "logabs + linear RMS per channel, PRIMARY",
+    "relative": "relative band power, SECONDARY descriptive only"
+  },
+  "welch": {
+    "fs": 128.0,
+    "nperseg": 256,
+    "detrend": "constant",
+    "bands_hz": {
+      "delta": [
+        1,
+        4
+      ],
+      "theta": [
+        4,
+        8
+      ],
+      "alpha": [
+        8,
+        13
+      ],
+      "beta": [
+        13,
+        30
+      ],
+      "gamma": [
+        30,
+        45
+      ]
+    },
+    "relative_total_range_hz": [
+      1,
+      45
+    ]
+  },
+  "eps": 1e-12,
+  "models": {
+    "LR_std": "StandardScaler + LogisticRegression(max_iter=5000, class_weight=balanced, C=1)",
+    "LR_nostd": "LogisticRegression(max_iter=5000, class_weight=balanced, C=1), no feature standardization"
+  },
+  "seed": 42,
+  "test_data_used": false,
+  "windows_removed": 0,
+  "versions": {
+    "python": "3.13.6",
+    "numpy": "2.2.6",
+    "sklearn": "1.7.1",
+    "pandas": "2.3.1"
+  },
+  "metadata_contract": "processed_data\\contract_v1\\metadata.csv",
+  "validation_all_passed": true
+}

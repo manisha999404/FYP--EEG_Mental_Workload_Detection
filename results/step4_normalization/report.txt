@@ -1,0 +1,52 @@
+STEP 4 (REVISED) - NORMALIZATION COMPARISON, subject-wise CV on development subjects only
+==============================================================================
+Folds: 5 | dev subjects: 38 | test subjects untouched: 10 | windows removed: 0
+Scaling constants fitted on each fold's training subjects only; validation only transformed.
+Mean +/- SD across folds (ddof=1; folds where ROC-AUC is undefined are skipped).
+
+PRIMARY (amplitude-retaining features) - basis for the normalization decision
+-----------------------------------------------------------------------------
+[logabs | LR_std]
+  A_none    accuracy=0.7586+/-0.0451  balanced_accuracy=0.7586+/-0.0451  f1=0.7618+/-0.0536  roc_auc=0.8374+/-0.0396
+  B_zscore  accuracy=0.7586+/-0.0451  balanced_accuracy=0.7586+/-0.0451  f1=0.7618+/-0.0536  roc_auc=0.8374+/-0.0396
+  C_robust  accuracy=0.7586+/-0.0451  balanced_accuracy=0.7586+/-0.0451  f1=0.7618+/-0.0536  roc_auc=0.8374+/-0.0396
+[logabs | LR_nostd]
+  A_none    accuracy=0.7627+/-0.0432  balanced_accuracy=0.7627+/-0.0432  f1=0.7663+/-0.0494  roc_auc=0.8403+/-0.0393
+  B_zscore  accuracy=0.7626+/-0.0440  balanced_accuracy=0.7626+/-0.0440  f1=0.7661+/-0.0496  roc_auc=0.8402+/-0.0395
+  C_robust  accuracy=0.7627+/-0.0427  balanced_accuracy=0.7627+/-0.0427  f1=0.7661+/-0.0489  roc_auc=0.8404+/-0.0395
+[logabs_rms | LR_std]
+  A_none    accuracy=0.7579+/-0.0538  balanced_accuracy=0.7579+/-0.0538  f1=0.7633+/-0.0633  roc_auc=0.8246+/-0.0623
+  B_zscore  accuracy=0.7577+/-0.0537  balanced_accuracy=0.7577+/-0.0537  f1=0.7633+/-0.0629  roc_auc=0.8248+/-0.0622
+  C_robust  accuracy=0.7575+/-0.0539  balanced_accuracy=0.7575+/-0.0539  f1=0.7630+/-0.0633  roc_auc=0.8247+/-0.0622
+[logabs_rms | LR_nostd]
+  A_none    accuracy=0.7625+/-0.0512  balanced_accuracy=0.7625+/-0.0512  f1=0.7694+/-0.0581  roc_auc=0.8248+/-0.0608
+  B_zscore  accuracy=0.7636+/-0.0495  balanced_accuracy=0.7636+/-0.0495  f1=0.7703+/-0.0562  roc_auc=0.8254+/-0.0601
+  C_robust  accuracy=0.7632+/-0.0512  balanced_accuracy=0.7632+/-0.0512  f1=0.7700+/-0.0582  roc_auc=0.8250+/-0.0607
+
+SECONDARY / DESCRIPTIVE ONLY (relative band power) - not used for the decision
+------------------------------------------------------------------------------
+[relative | LR_std]
+  A_none    accuracy=0.7561+/-0.0470  balanced_accuracy=0.7561+/-0.0470  f1=0.7556+/-0.0490  roc_auc=0.8309+/-0.0473
+  B_zscore  accuracy=0.7561+/-0.0470  balanced_accuracy=0.7561+/-0.0470  f1=0.7556+/-0.0490  roc_auc=0.8309+/-0.0473
+  C_robust  accuracy=0.7561+/-0.0470  balanced_accuracy=0.7561+/-0.0470  f1=0.7556+/-0.0490  roc_auc=0.8309+/-0.0473
+[relative | LR_nostd]
+  A_none    accuracy=0.7536+/-0.0491  balanced_accuracy=0.7536+/-0.0491  f1=0.7540+/-0.0543  roc_auc=0.8303+/-0.0500
+  B_zscore  accuracy=0.7536+/-0.0491  balanced_accuracy=0.7536+/-0.0491  f1=0.7540+/-0.0543  roc_auc=0.8303+/-0.0500
+  C_robust  accuracy=0.7536+/-0.0491  balanced_accuracy=0.7536+/-0.0491  f1=0.7540+/-0.0543  roc_auc=0.8303+/-0.0500
+
+Metadata: C:\Users\imman\OneDrive\Desktop\FYP\processed_data\contract_v1\metadata.csv
+Validation: row_count_matches_X=PASS; no_missing_in_key_columns=PASS; window_index_unique_per_recording=PASS; recording_belongs_to_one_subject=PASS; subject_label_condition_consistent=PASS; split_subjects_exist_in_metadata=PASS; test_subjects_found_in_splits=PASS; test_disjoint_from_development=PASS; train_val_test_disjoint_global=PASS; split_subject_counts=PASS; split_window_counts=PASS; dev_equals_train_plus_val=PASS; fold0_train_val_disjoint_and_no_test=PASS; fold1_train_val_disjoint_and_no_test=PASS; fold2_train_val_disjoint_and_no_test=PASS; fold3_train_val_disjoint_and_no_test=PASS; fold4_train_val_disjoint_and_no_test=PASS; cv_validation_sets_mutually_disjoint=PASS; X_development_windows_finite=PASS
+
+Equivalence diagnostic: max |difference| in the features LR_std actually receives (train-standardized validation features) vs A_none, max over folds:
+  logabs     B_zscore  5.083e-08
+  logabs     C_robust  5.559e-10
+  logabs_rms B_zscore  3.358e-05
+  logabs_rms C_robust  4.222e-03
+  relative   B_zscore  1.776e-14
+  relative   C_robust  2.132e-14
+
+How to read this:
+  * Scaling a channel by s adds a constant (-2*log10 s) to all log10 band powers of that channel; LR's intercept / feature standardization absorbs it. Differences near 0 in the diagnostic mean LR_std cannot distinguish A/B/C for that feature set (only eps and median-centering can).
+  * Linear RMS and LR_nostd are where scaling can genuinely change results; compare those rows.
+  * Differences between variants smaller than the across-fold SD should not be called an improvement.
+  * Relative band power is retained for description only; no test data was used.

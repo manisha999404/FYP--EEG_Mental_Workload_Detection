@@ -1,0 +1,55 @@
+STEP 3b AUDIT SUMMARY - DESCRIPTIVE ONLY (nothing removed, normalized or trained)
+Decision-eligible group: development (train+validation). Test = descriptive only.
+Thresholds 100/150/200 are EXPLORATORY. 'Heuristic reading' lines use the rules
+  printed here (concentration ratio >= 2.0/1.5, std/robust >= 1.5/1.2); they label numbers, they are not decisions.
+
+A. CONCENTRATION OF EXTREME AMPLITUDES
+  Exploratory thresholds, development, subject/recording level (equal-share expectation for the top 10% of subjects = 10.5%):
+   exploratory_threshold condition  total_extreme  top_k_share  conc_ratio  gini  units_for_50pct
+                     100       low           2318         0.13        1.21  0.14               16
+                     100      high           2617         0.11        1.07  0.05               18
+                     150       low           1684         0.18        1.67  0.30               12
+                     150      high           1975         0.15        1.42  0.20               15
+                     200       low           1211         0.24        2.32  0.42               10
+                     200      high           1424         0.20        1.93  0.30               12
+  Rank-based extremes (top q% of development windows by max peak-to-peak):
+   top_percent_of_dev_windows  value_at_rank_cutoff  n_windows  n_subjects_contributing  pct_from_high_class  top_k_share  conc_ratio  gini  units_for_50pct
+                            1               7164.90         57                        3                10.53          1.0        9.50  0.96                1
+                            5               1951.74        283                       29                48.76          0.6        5.67  0.68                3
+  Heuristic reading: rank-based top-5% ratio = 5.67, largest cell-level ratio = 4.50 -> CONCENTRATED in a few subjects/cells.
+  Development subjects with most windows >200 (both classes, of 148): S40=148, S30=147, S6=128, S31=126, S1=123
+
+B. EFFECT OF EXTREME VALUES ON ORDINARY MEAN/STD SCALING (development)
+  channel  pooled_std  pooled_mad_sigma  inflation_std_over_mad_sigma  energy_share_of_top1pct_samples  loso_max_rel_change_std  loso_max_rel_change_mad_sigma
+      AF3      49.782            13.092                         3.802                            0.728                    0.269                          0.030
+       F7      42.670            14.145                         3.017                            0.757                    0.090                          0.019
+       F3      69.612             9.638                         7.223                            0.951                    0.471                          0.018
+      FC5      29.938             9.594                         3.121                            0.800                    0.202                          0.024
+       T7     247.297             8.755                        28.246                            0.956                    0.660                          0.020
+       P7      17.650             7.090                         2.489                            0.762                    0.187                          0.017
+       O1      21.531             8.961                         2.403                            0.761                    0.169                          0.015
+       O2      21.512            10.308                         2.087                            0.724                    0.102                          0.013
+       P8      28.721            10.157                         2.828                            0.796                    0.182                          0.021
+       T8      38.777            12.960                         2.992                            0.842                    0.319                          0.013
+      FC6      34.472            13.224                         2.607                            0.734                    0.255                          0.018
+       F4      32.594            11.959                         2.725                            0.796                    0.177                          0.023
+       F8      43.698            17.074                         2.559                            0.719                    0.194                          0.014
+      AF4      33.332            14.254                         2.338                            0.682                    0.114                          0.023
+  (pooled std and its leave-one-out change are exact; pooled robust sigma uses 10000 random samples per subject, seed 42.)
+  Gaussian reference: top 1% of samples hold 0.084 of the energy.
+  Median (over channels) pooled std/robust sigma = 2.78; per subject-channel std/robust sigma: median 1.40, p90 3.96, max 32.66.
+  Between-subject spread (SD log2): ordinary median 0.83 vs robust median 0.40.
+  Largest single-subject change of pooled scale (median over channels): std 19.1% vs robust 1.9%.
+  Heuristic reading: ordinary z-score scale is STRONGLY affected.
+
+C. IS ROBUST SCALING WORTH CARRYING INTO STEP 4?
+  Heuristic reading: YES - include robust (median/MAD) scaling as a CANDIDATE next to global z-score and per-subject scaling.
+  Whether it actually helps is a Step 4 question (subject-wise CV, development only).
+
+D. IS THERE A DEFENSIBLE REASON TO REMOVE RECORDINGS/WINDOWS?
+  Development recordings with >=90% of windows above 200 (exploratory): 9 of 76.
+  Development subject-channel cells with std/robust >= 3.0: 72 of 532 (listed in 2_review_list_NOT_exclusions.csv for human review).
+  Nothing was removed. Any exclusion would need an a-priori, label-blind, documented
+  rule fixed on development data only; the exploratory thresholds are not validated
+  artifact limits and a rule that removes ~half of the windows would not be defensible
+  without evidence that it helps under subject-wise CV (a Step 4 comparison).

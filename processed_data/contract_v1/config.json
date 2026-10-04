@@ -1,0 +1,44 @@
+{
+  "sampling_rate_hz": 128,
+  "notch_hz": 50,
+  "notch_q": 30,
+  "bandpass_hz": [
+    1,
+    40
+  ],
+  "bandpass_order": 4,
+  "filtering": "zero-phase filtfilt (offline, non-causal)",
+  "window_seconds": 4,
+  "overlap": 0.5,
+  "normalization": "none (must be fitted on training subjects only)",
+  "layout": "(windows, time, channels) - channels last",
+  "channel_names": [
+    "AF3",
+    "F7",
+    "F3",
+    "FC5",
+    "T7",
+    "P7",
+    "O1",
+    "O2",
+    "P8",
+    "T8",
+    "FC6",
+    "F4",
+    "F8",
+    "AF4"
+  ],
+  "shape": [
+    7104,
+    512,
+    14
+  ],
+  "X_sha256": "c428a3bfdcfdcb9a913919758bfb3d834ef792ecec37c4c33a6c557fa9423b39",
+  "seed": 42,
+  "versions": {
+    "python": "3.13.6",
+    "numpy": "2.2.6",
+    "scipy": "1.16.1",
+    "pandas": "2.3.1"
+  }
+}

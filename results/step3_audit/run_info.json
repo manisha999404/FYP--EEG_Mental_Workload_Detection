@@ -1,0 +1,57 @@
+{
+  "step": "3 - descriptive audit (no decisions)",
+  "input_sha256_before_and_after_identical": true,
+  "input_sha256": {
+    "X_filtered.npy": "2a65841851c3957c3396313c23021182189b2cd939336333fdcd5c2c9e00887e",
+    "metadata.csv": "9012fd9d83cdc88632e940e6d47174fc2a4533d57848f9c585089f0ce8634908",
+    "splits.json": "bcc32d4b1b182374c23f923d984ef5e22d4f0b860978709c5634ee7c688994ba"
+  },
+  "exploratory_ptp_thresholds": [
+    100,
+    150,
+    200
+  ],
+  "assumed_units": "uV (not verified)",
+  "bands_hz": {
+    "delta": [
+      1,
+      4
+    ],
+    "theta": [
+      4,
+      8
+    ],
+    "alpha": [
+      8,
+      13
+    ],
+    "beta": [
+      13,
+      30
+    ],
+    "low_gamma": [
+      30,
+      40
+    ]
+  },
+  "welch": {
+    "fs": 128,
+    "nperseg": 256,
+    "noverlap": 128,
+    "window": "hann",
+    "detrend": "constant"
+  },
+  "windows_removed": 0,
+  "normalization_applied": false,
+  "groups": {
+    "development": "train+validation",
+    "test": "descriptive only"
+  },
+  "versions": {
+    "python": "3.13.6",
+    "numpy": "2.2.6",
+    "scipy": "1.16.1",
+    "pandas": "2.3.1",
+    "matplotlib": "3.10.5"
+  }
+}

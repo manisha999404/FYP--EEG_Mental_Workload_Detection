@@ -1,0 +1,31 @@
+{
+  "step": "3b - concentration + robust statistics (descriptive, no decisions)",
+  "input_sha256": {
+    "X_filtered.npy": "2a65841851c3957c3396313c23021182189b2cd939336333fdcd5c2c9e00887e",
+    "metadata.csv": "9012fd9d83cdc88632e940e6d47174fc2a4533d57848f9c585089f0ce8634908",
+    "splits.json": "bcc32d4b1b182374c23f923d984ef5e22d4f0b860978709c5634ee7c688994ba"
+  },
+  "inputs_unchanged": true,
+  "exploratory_ptp_thresholds": [
+    100,
+    150,
+    200
+  ],
+  "rank_based_percents": [
+    1,
+    5
+  ],
+  "subsample_per_subject_for_pooled_robust": 10000,
+  "seed": 42,
+  "windows_removed": 0,
+  "subjects_removed": 0,
+  "normalization_applied": false,
+  "heuristic_rules": {
+    "conc_strong": 2.0,
+    "conc_moderate": 1.5,
+    "inflation_strong": 1.5,
+    "inflation_mild": 1.2,
+    "review_ratio": 3.0
+  },
+  "python": "3.13.6"
+}

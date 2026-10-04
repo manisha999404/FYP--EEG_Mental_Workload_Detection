@@ -1,0 +1,82 @@
+{
+  "metadata_path": "C:\\Users\\imman\\OneDrive\\Desktop\\FYP\\processed_data\\contract_v1\\metadata.csv",
+  "checks": {
+    "row_count_matches_X": {
+      "passed": true,
+      "detail": "metadata rows=7104, X windows=7104"
+    },
+    "no_missing_in_key_columns": {
+      "passed": true,
+      "detail": "checked ['subject', 'label', 'condition', 'window', 'recording']"
+    },
+    "window_index_unique_per_recording": {
+      "passed": true,
+      "detail": "(recording, window) pairs unique; global 0..N-1 order=False"
+    },
+    "recording_belongs_to_one_subject": {
+      "passed": true,
+      "detail": "96 recordings, 48 subjects"
+    },
+    "subject_label_condition_consistent": {
+      "passed": true,
+      "detail": "each condition maps to one label; each recording has one condition; conditions=['high', 'low']"
+    },
+    "split_subjects_exist_in_metadata": {
+      "passed": true,
+      "detail": "48 split subjects, all present"
+    },
+    "test_subjects_found_in_splits": {
+      "passed": true,
+      "detail": "10 test subjects"
+    },
+    "test_disjoint_from_development": {
+      "passed": true,
+      "detail": "test \u2229 (train \u222a val across folds) = \u2205"
+    },
+    "train_val_test_disjoint_global": {
+      "passed": true,
+      "detail": "train=30, val=8, test=10; pairwise overlaps = 0"
+    },
+    "split_subject_counts": {
+      "passed": true,
+      "detail": "(30, 8, 10) vs expected (30, 8, 10)"
+    },
+    "split_window_counts": {
+      "passed": true,
+      "detail": "(4440, 1184, 1480) vs expected (4440, 1184, 1480)"
+    },
+    "dev_equals_train_plus_val": {
+      "passed": true,
+      "detail": "38 development subjects"
+    },
+    "fold0_train_val_disjoint_and_no_test": {
+      "passed": true,
+      "detail": "train=30, val=8"
+    },
+    "fold1_train_val_disjoint_and_no_test": {
+      "passed": true,
+      "detail": "train=30, val=8"
+    },
+    "fold2_train_val_disjoint_and_no_test": {
+      "passed": true,
+      "detail": "train=30, val=8"
+    },
+    "fold3_train_val_disjoint_and_no_test": {
+      "passed": true,
+      "detail": "train=31, val=7"
+    },
+    "fold4_train_val_disjoint_and_no_test": {
+      "passed": true,
+      "detail": "train=31, val=7"
+    },
+    "cv_validation_sets_mutually_disjoint": {
+      "passed": true,
+      "detail": "5 folds, 38 distinct validation subjects"
+    },
+    "X_development_windows_finite": {
+      "passed": true,
+      "detail": "5624 development windows checked; test windows not read"
+    }
+  },
+  "test_windows_read": 0
+}

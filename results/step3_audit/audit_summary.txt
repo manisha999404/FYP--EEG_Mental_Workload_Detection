@@ -1,0 +1,90 @@
+STEP 3 AUDIT SUMMARY  -  DESCRIPTIVE ONLY
+No window was removed, nothing was normalized, no artifact threshold was
+chosen and no pipeline decision was made by this script.
+Groups: development = train+validation (decision-eligible in Step 4);
+        test = descriptive only; all = descriptive.
+
+Windows: 7104 | subjects: 48 | recordings: 96
+
+[A] Between-subject vs within-subject amplitude variation (per channel)
+    between_subject_sd_log2 : spread of subject std across people
+    median_abs_log2_ratio   : typical |high vs low| std change inside one person
+    between_over_within     : >1 means people differ more than classes do
+  group = development
+channel  between_subject_sd_log2  median_abs_log2_ratio  between_over_within  median_ratio_high_over_low  frac_subjects_high_gt_low
+    AF3                     0.96                   0.44                 2.17                        1.02                       0.55
+     F7                     0.83                   0.81                 1.02                        1.25                       0.61
+     F3                     1.26                   0.68                 1.87                        1.17                       0.61
+    FC5                     0.92                   0.75                 1.22                        1.13                       0.66
+     T7                     1.74                   0.75                 2.32                        1.26                       0.66
+     P7                     0.81                   0.32                 2.51                        1.07                       0.58
+     O1                     0.81                   0.51                 1.59                        1.13                       0.58
+     O2                     0.76                   0.41                 1.88                        1.09                       0.63
+     P8                     0.91                   0.41                 2.20                        1.11                       0.61
+     T8                     0.85                   0.62                 1.38                        1.35                       0.76
+    FC6                     0.78                   0.66                 1.17                        1.43                       0.79
+     F4                     0.83                   0.48                 1.76                        1.04                       0.53
+     F8                     0.73                   0.83                 0.88                        1.53                       0.82
+    AF4                     0.76                   0.44                 1.74                        1.09                       0.61
+  group = test
+channel  between_subject_sd_log2  median_abs_log2_ratio  between_over_within  median_ratio_high_over_low  frac_subjects_high_gt_low
+    AF3                     1.04                   0.99                 1.06                        0.89                       0.40
+     F7                     0.76                   1.23                 0.62                        1.87                       0.70
+     F3                     1.91                   1.44                 1.33                        1.13                       0.60
+    FC5                     1.12                   1.22                 0.92                        1.32                       0.60
+     T7                     1.57                   1.64                 0.96                        2.34                       0.70
+     P7                     1.27                   0.69                 1.85                        0.86                       0.40
+     O1                     1.36                   0.76                 1.79                        1.27                       0.60
+     O2                     1.32                   0.73                 1.82                        1.28                       0.70
+     P8                     1.38                   0.85                 1.62                        1.21                       0.60
+     T8                     1.36                   0.94                 1.44                        1.45                       0.80
+    FC6                     1.29                   1.00                 1.30                        1.53                       0.90
+     F4                     1.37                   1.05                 1.31                        1.32                       0.60
+     F8                     1.06                   1.13                 0.94                        2.21                       0.80
+    AF4                     1.08                   0.67                 1.60                        1.11                       0.70
+
+[B] Windows with >=1 channel above an EXPLORATORY peak-to-peak threshold (%)
+  group = development
+condition               low  high
+exploratory_threshold            
+100                   82.43 93.07
+150                   59.89 70.23
+200                   43.07 50.64
+  group = test
+condition               low  high
+exploratory_threshold            
+100                   85.41 90.14
+150                   61.35 72.16
+200                   46.49 56.76
+  group = all
+condition               low  high
+exploratory_threshold            
+100                   83.05 92.45
+150                   60.19 70.64
+200                   43.78 51.91
+  Paired high-vs-low across development subjects (exploratory):
+      group  exploratory_threshold  n_subjects  median_pct_low  median_pct_high  median_diff_high_minus_low  n_subjects_high_gt_low  n_subjects_high_lt_low  wilcoxon_p_EXPLORATORY
+development                    100          38           93.92            99.32                        1.35                      20                       7                    0.00
+development                    150          38           55.41            77.03                        4.05                      19                      16                    0.10
+development                    200          38           29.73            52.03                        3.38                      21                      16                    0.21
+
+[C] Relative band power, mean over subjects (development)
+condition  low  high
+band                
+delta     0.54  0.56
+theta     0.14  0.17
+alpha     0.16  0.11
+beta      0.13  0.12
+low_gamma 0.03  0.04
+  Mean change high - low (percentage points), development:
+           mean_change_pp_high_minus_low  sd_pp  n_subjects_increase  n_subjects_decrease
+band                                                                                     
+delta                               2.10   8.97                   23                   15
+theta                               3.01   2.51                   32                    6
+alpha                              -4.87   6.53                    8                   30
+beta                               -0.50   3.38                   17                   21
+low_gamma                           0.26   1.44                   23                   15
+
+DECISIONS MADE BY THIS STEP: none.
+Normalization, artifact handling and feature choices are decided in Step 4,
+using development-subject results only.
