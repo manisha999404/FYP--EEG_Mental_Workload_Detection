@@ -1,96 +1,262 @@
-# EEG Mental Workload Detection
-
-## Real-Time EEG-Based Mental Workload Detection Using Signal Processing, Machine Learning and Deep Learning
+# EEG-Based Mental Workload Detection
 
 ## Overview
 
-This project aims to detect mental workload using EEG (Electroencephalography) signals.
+A Final Year Project (ECE) focused on detecting mental workload from EEG signals using Digital Signal Processing (DSP), Machine Learning (ML), and Deep Learning (DL).
 
-The system processes EEG signals using Digital Signal Processing (DSP), Machine Learning (ML), and Deep Learning (DL) techniques to classify mental workload into:
+The project uses the STEW (Simultaneous Task EEG Workload) dataset to study EEG patterns associated with rest and multitasking conditions.
 
-- **Low Workload**
-- **High Workload**
-
-The project uses the **STEW (Simultaneous Task EEG Workload) Dataset**.
+> Current implementation is offline. Real-time inference is planned as a future extension.
 
 ## Project Pipeline
 
-Raw EEG Data  
-↓  
-Signal Preprocessing  
-↓  
-EEG Segmentation  
-↓  
-Subject-wise Train/Test Split  
-↓  
-Train-based Normalization  
-↓  
-Feature Extraction  
-↓  
-Machine Learning  
-↓  
-Deep Learning (EEGNet)  
-↓  
-Mental Workload Prediction
+STEW Raw EEG
+     ↓
+Filtering & Preprocessing
+     ↓
+4-second Windowing
+     ↓
+Subject-wise Train/Validation/Test Split
+     ↓
+Data Quality & Signal Audit
+     ↓
+Feature Extraction
+     ↓
+ML / DL Models
+     ↓
+Final Evaluation
+     ↓
+Real-time Extension
 
 ## Dataset
 
-The STEW (Simultaneous Task EEG Workload) Dataset contains EEG recordings from **48 subjects** under low- and high-workload conditions.
+Dataset: STEW (Simultaneous Task EEG Workload)
 
-- **14 EEG channels**
-- **Sampling frequency:** 128 Hz
-- **19,200 samples per recording**
-- **96 recordings in total**
+- 48 subjects
+- 14 EEG channels
+- Sampling frequency: 128 Hz
+- 2 conditions:
+  - Low workload: Rest
+  - High workload: SIMKAP multitasking condition
+- 74 windows per recording
+- Window size: 4 seconds (512 samples)
+- 50% overlap
 
-The raw dataset is not included in this repository due to its size.
+### Important
+
+The labels represent rest vs. multitasking, rather than a continuous measurement of workload. The model therefore learns EEG patterns associated with these two conditions as a workload proxy.
 
 ## Preprocessing
 
-The current preprocessing pipeline consists of:
+- 50 Hz notch filtering
+- 1–40 Hz Butterworth band-pass filter
+- 4th-order filter
+- Zero-phase filtfilt
+- 4-second windows
+- 50% overlap
+- 14 EEG channels
 
-1. **50 Hz Notch Filtering** — removal of power-line interference.
-2. **1–40 Hz Bandpass Filtering** — retaining the relevant EEG frequency range.
-3. **EEG Segmentation** — 4-second windows with 50% overlap.
-4. **Subject-wise Train/Test Split** — 38 training subjects and 10 testing subjects.
-5. **Train-based Normalization** — normalization parameters are calculated only from training data to prevent data leakage.
+### Channel Order
 
-### Processed Dataset
+AF3, F7, F3, FC5, T7, P7, O1, O2, P8, T8, FC6, F4, F8, AF4
 
-- **7,104 EEG windows**
-- Each window: **512 samples × 14 channels**
-- Low workload: **3,552 windows**
-- High workload: **3,552 windows**
+The final EEG dataset is filtered but not additionally normalized.
 
-Final dataset:
+## Final Dataset
 
-X_train → (5624, 512, 14)  
-X_test → (1480, 512, 14)
+X_filtered.npy
+Shape: (7104, 512, 14)
+Type: float32
+
+Total windows: 7104
+Low workload: 3552
+High workload: 3552
+Subjects: 48
+
+## Subject-wise Data Split
+
+The split is performed at the subject level to prevent data leakage.
+
+| Split | Subjects | Windows |
+|---|---:|---:|
+| Train | 30 | 4440 |
+| Validation | 8 | 1184 |
+| Test | 10 | 1480 |
+| Total | 48 | 7104 |
+
+No subject appears in more than one split.
+
+### Cross-Validation
+
+5-fold subject-wise cross-validation is performed only on the 38 development subjects.
+
+The final 10 test subjects remain untouched until the complete pipeline is frozen.
+
+## Data Audit
+
+The dataset was checked for:
+
+- Shape and numerical validity
+- Missing/invalid values
+- Subject-wise consistency
+- Amplitude variation
+- Extreme-value concentration
+- PSD and frequency-band behaviour
+
+The audit showed considerable between-subject amplitude variation.
+
+No subjects or windows were removed based on this audit.
+
+## Normalization Study
+
+Three variants were compared:
+
+A. No additional scaling
+B. Z-score scaling
+C. Robust scaling
+
+Subject-wise cross-validation showed that channel-wise scaling produced almost identical classical ML results.
+
+Therefore:
+
+No additional global channel-wise normalization is applied to the shared EEG dataset.
+
+Model-specific normalization can still be tested for deep learning, but it must be fitted using training data only.
+
+## Baseline Result
+
+A Logistic Regression baseline achieved approximately:
+
+Accuracy: ~76%
+F1-score: ~76%
+AUC: ~0.83–0.84
+
+This provides a baseline for comparison with future models.
+
+## Next Steps
+
+### 1. Feature Extraction
+
+Extract:
+
+- Time-domain features
+- Frequency-domain / band-power features
+- Relative band power
+- Hjorth parameters
+- Other suitable EEG features
+
+Compare feature families:
+
+Time-domain
+Frequency-domain
+Time + Frequency
+Time + Frequency + Hjorth
+Selected features
+
+### 2. Classical ML
+
+Evaluate models such as:
+
+- Logistic Regression
+- SVM
+- Random Forest
+- XGBoost / LightGBM
+
+Use the same subject-wise folds for fair comparison.
+
+### 3. Deep Learning
+
+Evaluate models such as:
+
+- 1D CNN
+- EEGNet
+- CNN-LSTM / suitable temporal models
+
+Training must use only the development subjects.
+
+### 4. Final Test
+
+After feature and model selection is completely frozen:
+
+- Evaluate once on the 10 held-out test subjects.
+- Do not use test data for feature selection, tuning, normalization, or early stopping.
 
 ## Repository Structure
 
 FYP/
-├── STEW Dataset/              
-├── notebooks/
-│   └── EEG_preprocessing.ipynb
+│
 ├── preprocessing/
-│   └── preprocessing.py
-├── feature_extraction/
-├── machine_learning/
-├── deep_learning/
-├── processed_data/            
+│   ├── preprocessing.py
+│   ├── build_dataset.py
+│   ├── make_splits.py
+│   ├── audit_dataset.py
+│   ├── audit_robust.py
+│   └── normalisation.py
+│
+├── processed_data/
+│   └── contract_v1/
+│       ├── X_filtered.npy
+│       ├── y.npy
+│       ├── metadata.csv
+│       ├── splits.json
+│       └── config.json
+│
 ├── results/
-├── utils/
-├── .gitignore
+│   ├── step3_audit/
+│   ├── step3b_audit/
+│   └── step4_normalization/
+│
 └── README.md
+
+X_filtered.npy is stored using Git LFS.
+
+The raw STEW dataset is not included in the repository.
+
+## Reproducing the Dataset
+
+From the project root:
+
+python preprocessing/build_dataset.py
+python preprocessing/make_splits.py
+python preprocessing/audit_dataset.py
+python preprocessing/audit_robust.py
+python preprocessing/normalisation.py
+
+## Important Rules
+
+1. Use subject-wise splitting for all evaluation.
+2. Never use test subjects during development.
+3. Fit scalers using training subjects only.
+4. Do not remove subjects/windows based on test performance.
+5. Use the same folds when comparing models.
+6. Document all feature engineering and model choices.
+7. Keep the frozen preprocessing dataset unchanged unless a modification is documented and validated.
+
+## Limitations
+
+- STEW provides condition-based labels rather than continuous workload scores.
+- EEG signals contain subject-specific variations.
+- Eye/muscle activity and other physiological effects may influence recordings.
+- Current implementation is offline because filtering uses zero-phase filtfilt.
+- Real-time EEG acquisition and inference are future work.
 
 ## Current Status
 
-**Completed:** EEG dataset analysis, DSP preprocessing, segmentation, subject-wise splitting, train-based normalization, and reusable preprocessing pipeline.
-
-**Next:** Feature extraction, Machine Learning, EEGNet, visualization, and final integration.
+| Component | Status |
+|---|---|
+| Dataset & preprocessing | Complete |
+| Subject-wise split | Complete |
+| 5-fold CV | Complete |
+| Data audit | Complete |
+| Normalization study | Complete |
+| Feature extraction | Next |
+| Classical ML | Pending |
+| Deep Learning / EEGNet | Pending |
+| Final test | Pending |
+| Real-time system | Future work |
 
 ## References
 
-1. **STEW: Simultaneous Task EEG Workload Data Set** — IEEE DataPort, 2018.
-2. **EEGNet: A Compact Convolutional Neural Network for EEG-based Brain-Computer Interfaces** — Journal of Neural Engineering, 2018.
-3. **Classification of Mental Workload Using Brain Connectivity and Machine Learning on EEG Data**.
+- STEW: Simultaneous Task EEG Workload Dataset
+- Emotiv EEG recordings
+- Standard EEG signal-processing and machine-learning methods
